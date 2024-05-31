@@ -25,39 +25,31 @@ BackGround = Background("./Images/streetview.png", [0,0])
 class Fumo(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        DEFAULT_IMAGE_SIZE = (100, 100)
+        DEFAULT_IMAGE_SIZE = (90, 75)
 
-        self.image = pg.transform.scale(pg.image.load("./Images/file.png"), DEFAULT_IMAGE_SIZE)
+        self.image = pg.transform.scale(pg.image.load("./Images/man.png"), DEFAULT_IMAGE_SIZE)
  
-        
-        
         self.rect = self.image.get_rect()
-        self.rect.x = 520
-        self.rect.y = 390
-    def update(self):
-        self.rect.centerx = pg.mouse.get_pos()[0]
-        self.rect.centery = pg.mouse.get_pos()[1]
+        self.rect.x = 595
+        self.rect.y = 650
+        print(f"self.rect.centerx,self.rect.centery")
 CSIZE = (100,100)
 crash1 = pg.transform.scale(pg.image.load("./Images/crash1.png"), CSIZE)
 crash2 = pg.transform.scale(pg.image.load("./Images/crash2.png"), CSIZE)
 crash3 = pg.transform.scale(pg.image.load("./Images/crash3.png"), CSIZE)
 crashpic = [crash1,crash2,crash3]
+carcoord = [640,705,765,825]
 class Snow(pg.sprite.Sprite):
-    def __init__(self, width: int):
-        
-        """
-        Params:
-            width: width of snow in px
-        """
+    def __init__(self):
         super().__init__()
         ISIZE = (75,75)
         self.image = pg.transform.scale(pg.image.load("./Images/icicle.png"), ISIZE)
 
         self.rect = self.image.get_rect()
 
-        self.vel_y = random.randint(5,8)
+        self.vel_y = random.randint(1,4)
         # Initial coords
-        self.rect.centerx = random.randint(1,1280)
+        self.rect.centerx = random.choice(carcoord)
         self.rect.centery = 1
 
         self.crashed = False
@@ -89,7 +81,7 @@ def main():
     fumo = Fumo()
     # Create more snow
     for _ in range(15):
-        snow = Snow(10)
+        snow = Snow()
         allsprites.add(snow)
         snow_sprites.add(snow)
 
@@ -108,7 +100,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 done = True
-
+        print(fumo.rect)
         # ----- LOGIC
         allsprites.update()
 
