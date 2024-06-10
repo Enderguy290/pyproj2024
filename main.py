@@ -172,10 +172,7 @@ def main():
 
         if snow_collided:
             fumo.splatter = True
-        
-        # ----- RENDER
-  
-
+    
         # Draw all the sprite groups
         allsprites.draw(screen)
 
