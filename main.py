@@ -13,15 +13,19 @@ GRAY = (140, 140, 140)
 WIDTH = 1460
 HEIGHT = 900
 TITLE = "RICHMOND SIMULATOR"
+
+#Assets and Rescaling
 ketchupsize = (100,100)
 kcup1 = pg.transform.scale(pg.image.load("./Images/ketchup.png"), ketchupsize)
 kcup2 = pg.transform.scale(pg.image.load("./Images/ketchup2.png"), ketchupsize)
 kcup3 = pg.transform.scale(pg.image.load("./Images/ketchup3.png"), ketchupsize)
 kcups = [kcup1, kcup2, kcup3]
 ketchuppic = random.choice(kcups)
+
 class Background(pg.sprite.Sprite):
     def __init__(self, image_file, location):
-        pg.sprite.Sprite.__init__(self)  #call Sprite initializer
+        pg.sprite.Sprite.__init__(self)  #could have super inited but huh
+
         self.image = pg.image.load(image_file)
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = location
@@ -40,6 +44,7 @@ class Fumo(pg.sprite.Sprite):
         print(f"self.rect.centerx,self.rect.centery")
         self.splatter = False
     def update(self):
+        # Limiter for x and -x and replace picture if cleaved by car
         if self.rect.x < 600:
             self.rect.x = 600
         if self.rect.x > 790:
@@ -47,14 +52,14 @@ class Fumo(pg.sprite.Sprite):
         if self.splatter == True:
             self.image = ketchuppic
             
-
+# Assets and Positions
 CSIZE = (130,130)
 crash1 = pg.transform.scale(pg.image.load("./Images/crash1.png"), CSIZE)
 crash2 = pg.transform.scale(pg.image.load("./Images/crash2.png"), CSIZE)
 crash3 = pg.transform.scale(pg.image.load("./Images/crash3.png"), CSIZE)
 crashpic = [crash1,crash2,crash3]
 carcoord = [640,705,765,825]
-
+# randomized car pics for variety
 ISIZE = (50,100)
 car1 = pg.transform.scale(pg.image.load("./Images/car1.png"), ISIZE)
 car2 = pg.transform.scale(pg.image.load("./Images/car2.png"), ISIZE)
@@ -88,8 +93,6 @@ class Snow(pg.sprite.Sprite):
             self.crashed = True
 
             
-
-
 def main():
     pg.init()
 
@@ -116,6 +119,7 @@ def main():
 
 
     # ----- MAIN LOOP
+    # music loop 
     file = './Images/pgbm.mp3'
     mixer.init()
     mixer.music.load(file)
@@ -128,17 +132,16 @@ def main():
         screen.fill([255, 255, 255])
         screen.blit(BackGround.image, BackGround.rect)
 
-        
+        # Timer Function (stops counting when fumo.splatter = true)
         if fumo.splatter == False:
             ticks=pg.time.get_ticks()
             millis=ticks%1000
             seconds=int(ticks/1000 % 60)
             minutes=int(ticks/60000 % 24)
             out='{minutes:02d}:{seconds:02d}:{millis}'.format(minutes=minutes, millis=millis, seconds=seconds)
-        
-        
-
         font.render_to(screen, (300, 230), out, pg.Color('black'))
+
+        # print(fumo.rect)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 done = True
@@ -147,14 +150,14 @@ def main():
                     fumo.rect.x -= 65
                 if event.key == pg.K_RIGHT:
                     fumo.rect.x += 65
-        # print(fumo.rect)
+        
 
         # ----- LOGIC
         allsprites.update()
         
 
         
-        # Clone snow for every snow that falls of the bottom
+        # Clone car for every car that falls to the top or the bottom
         for snow in snow_sprites:
             
             if snow.rect.bottom >= 850 or snow.rect.bottom <=-10:
