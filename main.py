@@ -150,6 +150,8 @@ def main():
                     fumo.rect.x -= 65
                 if event.key == pg.K_RIGHT:
                     fumo.rect.x += 65
+                if event.key == pg.K_ESCAPE:
+                    done = True
         
 
         # ----- LOGIC
